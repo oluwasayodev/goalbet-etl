@@ -1,17 +1,12 @@
 import requests
-import psycopg2
+from sqlalchemy import create_engine
 from pathlib import Path
 
 def get_postgres_connection(host:str='localhost', port:int='5432', db_name:str='postgres', db_user:str='postgres', db_password:str='password'):
-    conn = psycopg2.connect(
-        host=host,
-        port=port,
-        user=db_user,
-        password=db_password,
-        database=db_name
+    engine = create_engine(
+        f'postgresql+psycopg2://{db_user}:{db_password}@{host}:{port}/{db_name}'
     )
-
-    return conn
+    return engine
 
 def download_contents(urls: list[str]):
     """
