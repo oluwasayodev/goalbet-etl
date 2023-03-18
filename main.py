@@ -1,11 +1,14 @@
 from extract import extract
 from transform import extract_columns, add_time_column, format_date_column
 from load import load_csv_to_postgres
-from utils import get_postgres_connection
+from utils import get_postgres_connection, get_env_database_credentials
+
 
 if __name__ == '__main__':
     downloaded_paths = extract()
     columns_to_extract = ['Div', 'Date', 'Time', 'HomeTeam', 'AwayTeam', 'FTHG', 'FTAG']
+    credentials = get_env_database_credentials()
+    conn = get_postgres_connection(**credentials)
     for path in downloaded_paths:
         try:
             transformed_path = extract_columns(path, columns_to_extract)
@@ -17,5 +20,4 @@ if __name__ == '__main__':
             transformed_path = format_date_column(transformed_path, 'Date')
 
         finally:
-            conn = get_postgres_connection(db_name='footballdb')
             load_csv_to_postgres(transformed_path, conn)
