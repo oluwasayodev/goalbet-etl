@@ -2,3 +2,4 @@ extract/*
 transformed/*
 *.ipynb
 __pycache__/**
+*.env
